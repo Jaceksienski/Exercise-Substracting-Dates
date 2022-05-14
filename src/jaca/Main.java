@@ -21,8 +21,7 @@ public class Main {
             MyDate(String date) {
                 if (date.contains("pm")) isStringPm = true;
                 String dateWithoutAmPm = date.substring(0, date.length() - 2);
-                ArrayList<String> splitDate = new ArrayList<>();
-                splitDate.addAll(List.of(dateWithoutAmPm.split(":")));
+                ArrayList<String> splitDate = new ArrayList<>(List.of(dateWithoutAmPm.split(":")));
                 for (String s : splitDate) {
                     splitDateInt.add(Integer.valueOf(s));
                 }
