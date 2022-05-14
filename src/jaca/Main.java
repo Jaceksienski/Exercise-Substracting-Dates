@@ -14,37 +14,35 @@ public class Main {
 
     public static String StringChallenge(String str) {
 
-        String[] datesWithAmPm = str.split("-");
-        boolean[] isPm = new boolean[2];
+        class MyDate {
+            private boolean isStringPm;
+            private final ArrayList<Integer> splitDateInt = new ArrayList<>();
 
-        if (datesWithAmPm[0].contains("pm")) isPm[0] = true;
-        if (datesWithAmPm[1].contains("pm")) isPm[1] = true;
-
-        datesWithAmPm[0] = datesWithAmPm[0].substring(0, datesWithAmPm[0].length() - 2);
-        datesWithAmPm[1] = datesWithAmPm[1].substring(0, datesWithAmPm[1].length() - 2);
-
-        ArrayList<String> dates = new ArrayList();
-        ArrayList<Integer> datesInt = new ArrayList();
-        dates.addAll(List.of(datesWithAmPm[0].split(":")));
-        dates.addAll(List.of(datesWithAmPm[1].split(":")));
-
-        for (String s:
-             dates) {
-            datesInt.add(Integer.valueOf(s));
-        }
-        if(isPm[0]) {
-            datesInt.set(0, datesInt.get(0) + 12);
-            if (datesInt.get(0) == 24) datesInt.set(0,0);
-        }
-        if(isPm[1]) {
-            datesInt.set(2, datesInt.get(2)+12);
-            if (datesInt.get(2) == 24) datesInt.set(2,0);
+            MyDate(String date) {
+                if (date.contains("pm")) isStringPm = true;
+                String dateWithoutAmPm = date.substring(0, date.length() - 2);
+                ArrayList<String> splitDate = new ArrayList<>();
+                splitDate.addAll(List.of(dateWithoutAmPm.split(":")));
+                for (String s : splitDate) {
+                    splitDateInt.add(Integer.valueOf(s));
+                }
+                if (isStringPm) {
+                    splitDateInt.set(0, splitDateInt.get(0) + 12);
+                    if (splitDateInt.get(0) == 24) splitDateInt.set(0, 0);
+                }
+            }
+            LocalTime getDataAsLocalTime() {
+                return LocalTime.of(splitDateInt.get(0),splitDateInt.get(1));
+            }
         }
 
-        LocalTime time1 = LocalTime.of(datesInt.get(0),datesInt.get(1));
-        LocalTime time2 = LocalTime.of(datesInt.get(2),datesInt.get(3));
+        String[] splitStr = str.split("-");
+        MyDate date1 = new MyDate(splitStr[0]);
+        MyDate date2 = new MyDate(splitStr[1]);
 
-        str = String.valueOf(MINUTES.between(time1, time2));
+        str = String.valueOf(MINUTES.between(
+                date1.getDataAsLocalTime(),
+                date2.getDataAsLocalTime()));
 
         return str;
     }
