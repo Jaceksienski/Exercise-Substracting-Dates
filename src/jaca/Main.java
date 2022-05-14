@@ -22,9 +22,7 @@ public class Main {
                 if (date.contains("pm")) isStringPm = true;
                 String dateWithoutAmPm = date.substring(0, date.length() - 2);
                 ArrayList<String> splitDate = new ArrayList<>(List.of(dateWithoutAmPm.split(":")));
-                for (String s : splitDate) {
-                    splitDateInt.add(Integer.valueOf(s));
-                }
+                splitDate.forEach(e->splitDateInt.add(Integer.valueOf(e)));
                 if (isStringPm) {
                     splitDateInt.set(0, splitDateInt.get(0) + 12);
                     if (splitDateInt.get(0) == 24) splitDateInt.set(0, 0);
